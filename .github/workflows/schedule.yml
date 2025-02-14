@@ -1,0 +1,21 @@
+name: Run Script Every 7 Minutes Using Docker
+
+on:
+  schedule:
+    - cron: '*/7 * * * *'  # Runs every 7 minutes
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+
+      - name: Pull and run the Docker image
+        run: |
+          docker pull ghcr.io/YOUR_GITHUB_USERNAME/my-python-script:latest
+          docker run --rm ghcr.io/YOUR_GITHUB_USERNAME/my-python-script:latest
