@@ -3,7 +3,7 @@ name: Build & Push Docker Image
 on:
   push:
     branches:
-      - main  # Runs when code is pushed to main
+      - main
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
@@ -25,13 +25,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-docker-
 
-      - name: Build Docker image with cache
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image with correct tag
         run: |
-          docker buildx create --use
           docker buildx build \
             --cache-to=type=local,dest=/tmp/.buildx-cache \
             --cache-from=type=local,src=/tmp/.buildx-cache \
-            -t ghcr.io/tddouglas/train-tracker:latest .
+            -t ghcr.io/tddouglas/train-tracker:latest \
+            --load . 
+
+      - name: Verify Docker Image Exists (Debugging Step)
+        run: docker images ghcr.io/tddouglas/train-tracker
 
       - name: Push Docker image
         run: docker push ghcr.io/tddouglas/train-tracker:latest
