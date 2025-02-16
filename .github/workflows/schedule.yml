@@ -3,6 +3,7 @@ name: Run Script Every 7 Minutes Using Docker
 on:
   schedule:
     - cron: '*/7 * * * *'  # Runs every 7 minutes
+  workflow_dispatch:  # 👈 Allows manual trigger
 
 jobs:
   run-script:
@@ -18,4 +19,7 @@ jobs:
       - name: Pull and run the Docker image
         run: |
           docker pull ghcr.io/tddouglas/train-tracker:latest
-          docker run --rm ghcr.io/tddouglas/train-tracker:latest
+          docker run --rm \
+            -e SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            -e SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }} \
+            ghcr.io/tddouglas/train-tracker:latest
