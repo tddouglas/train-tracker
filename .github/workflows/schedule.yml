@@ -16,9 +16,16 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-      - name: Pull and run the Docker image
+      - name: Check if Docker image exists locally
         run: |
-          docker pull ghcr.io/tddouglas/train-tracker:latest
+          if [[ "$(docker images -q ghcr.io/tddouglas/train-tracker:latest 2> /dev/null)" == "" ]]; then
+            docker pull ghcr.io/tddouglas/train-tracker:latest
+          else
+            echo "Image already exists locally, skipping pull."
+          fi
+
+      - name: Run Docker container
+        run: |
           docker run --rm \
             -e SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
             -e SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }} \

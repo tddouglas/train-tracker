@@ -17,8 +17,21 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-      - name: Build Docker image
-        run: docker build -t ghcr.io/tddouglas/train-tracker:latest .
+      - name: Cache Docker layers  # ✅ Enable Docker layer caching
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
+      - name: Build Docker image with cache
+        run: |
+          docker buildx create --use
+          docker buildx build \
+            --cache-to=type=local,dest=/tmp/.buildx-cache \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            -t ghcr.io/tddouglas/train-tracker:latest .
 
       - name: Push Docker image
         run: docker push ghcr.io/tddouglas/train-tracker:latest
