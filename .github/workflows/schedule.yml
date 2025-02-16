@@ -17,5 +17,5 @@ jobs:
 
       - name: Pull and run the Docker image
         run: |
-          docker pull ghcr.io/YOUR_GITHUB_USERNAME/my-python-script:latest
-          docker run --rm ghcr.io/YOUR_GITHUB_USERNAME/my-python-script:latest
+          docker pull ghcr.io/tddouglas/train-tracker:latest
+          docker run --rm ghcr.io/tddouglas/train-tracker:latest

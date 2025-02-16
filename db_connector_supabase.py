@@ -26,7 +26,7 @@ def upsert_train_entry(train, table_name):
         .execute()
 
     track_var = train['track'] if train['track'] else None
-    print(f"Track var is-{track_var}")
+    # print(f"Track var is-{track_var}")
 
     if response.data:
         # If the train exists, update the existing record

@@ -1,6 +1,3 @@
-#!/Users/tyler/Documents/dev/amtrack_tracker/venv/bin/python
-from dotenv import load_dotenv
-import os
 from datetime import datetime, timezone
 import sys
 import requests as r
@@ -70,12 +67,12 @@ def get_nyc_trains():
 
         df_departures = pd.DataFrame(departures_info)
         df_arrivals = pd.DataFrame(arrivals_info)
-        pd.set_option('display.max_columns', None)  # Show all columns
-        pd.set_option('display.width', 1000)  # Increase display width to prevent wrapping
-        pd.set_option('display.colheader_justify', 'left')  # Optional: Align headers for better readability
+        # pd.set_option('display.max_columns', None)  # Show all columns
+        # pd.set_option('display.width', 1000)  # Increase display width to prevent wrapping
+        # pd.set_option('display.colheader_justify', 'left')  # Optional: Align headers for better readability
         # print(f"Departures - {last_update}:")
         # display(df_departures)
-
+        #
         # print(f"\nArrivals - {last_update}:")
         # display(df_arrivals)
 
@@ -93,7 +90,7 @@ if __name__ == "__main__":
     # print(f"Current hour: {current_hour}")
 
     # Skip execution between 2 AM - 5 AM ET (time in UTC)
-    if 21 <= current_hour < 24:
+    if 7 <= current_hour <= 10:
         print("Skipping execution: Between 2 AM - 5 AM ET")
         sys.exit(0)  # Exit script safely
 
