@@ -49,7 +49,12 @@ def get_nyc_trains():
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 
-    res = r.post(url, headers=headers, timeout=10)
+    try:
+        res = r.post(url, headers=headers, timeout=15)
+    except r.exceptions.ReadTimeout:
+        raise r.exceptions.ReadTimeout(
+            "Request timed out")  # Re-throwing request for monitoring purposes to see how frequently it happens. Ideally will gracefully handle these failures once they are less frequent.
+        # print("⚠️ Request timed out. Skipping this run...")
 
     if res.status_code == 200:
         res_soup = BeautifulSoup(res.text, 'html.parser')
