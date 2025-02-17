@@ -16,19 +16,22 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
-      - name: Restore Docker image tarball from cache
-        id: restore-docker-tar
-        uses: actions/cache@v4
-        with:
-          path: image.tar
-          key: docker-image-tar-ghcr-latest
+#      - name: Restore Docker image tarball from cache
+#        id: restore-docker-tar
+#        uses: actions/cache@v4
+#        with:
+#          path: image.tar
+#          key: docker-image-tar-ghcr-latest
+#
+#      - name: Load Docker image from tarball
+#        if: steps.restore-docker-tar.outputs.cache-hit == 'true'
+#        run: docker load -i image.tar
+#
+#      - name: Pull Docker image if cache miss
+#        if: steps.restore-docker-tar.outputs.cache-hit != 'true'
+#        run: docker pull ghcr.io/tddouglas/train-tracker:latest
 
-      - name: Load Docker image from tarball
-        if: steps.restore-docker-tar.outputs.cache-hit == 'true'
-        run: docker load -i image.tar
-
-      - name: Pull Docker image if cache miss
-        if: steps.restore-docker-tar.outputs.cache-hit != 'true'
+      - name: Pull Docker image
         run: docker pull ghcr.io/tddouglas/train-tracker:latest
 
       - name: Run Docker container
